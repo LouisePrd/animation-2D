@@ -74,50 +74,20 @@ const app = () => {
         point4.draw()
         ctx.restore()
 
-        ctx.clearRect(0, 0, cw, ch);
-
-        let time = Date.now() / 1000;
-        let radius = 100
-        ctx.clearRect(0, 0, cw, ch);
-        ctx.save();
-        ctx.translate(cw / 2, ch / 2);
-        for (let i = 0; i <= 10; i++) {
-            for (let j = 0; j <= 10; j++) {
-                let x = Math.cos(time) + i
-                let y = Math.sin(time) * radius + j * 20
-                let point = new Point(x, y)
-                point.draw()
-            }
-        }
-        ctx.restore();
+        // ctx.clearRect(0, 0, cw, ch);
+        
 
         size += 4
 
         ctx.save();
         ctx.translate(cw / 2, ch / 2);
         for (let i = 0; i < 4; i++) {
-            // drawRandomCircle()
+            drawRandomCircle()
         }
         ;
         ctx.restore();
 
     }
-
-    // const update = () => {
-    //     requestAnimationFrame(update)
-    //     let time = Date.now() / 1000;
-    //     let radius = 100
-    //     ctx.clearRect(0, 0, cw, ch);
-    //     ctx.save();
-    //     ctx.translate(cw / 2, ch / 2);
-    //             let x = Math.cos(time) * radius * 2
-    //             let y = 0
-    //             let point = new Point(x, y, 100, 'white')
-    //             point.draw()
-    //     ctx.restore();
-
-    // }
-
     requestAnimationFrame(update)
 
     function drawRandomCircle() {
@@ -135,6 +105,21 @@ const app = () => {
     }
 
 }
+
+    // const update = () => {
+    //     requestAnimationFrame(update)
+    //     let time = Date.now() / 1000;
+    //     let radius = 100
+    //     ctx.clearRect(0, 0, cw, ch);
+    //     ctx.save();
+    //     ctx.translate(cw / 2, ch / 2);
+    //             let x = Math.cos(time) * radius * 2
+    //             let y = 0
+    //             let point = new Point(x, y, 100, 'white')
+    //             point.draw()
+    //     ctx.restore();
+
+    // }
 
 document.addEventListener('DOMContentLoaded', () => {
     app()
