@@ -21,16 +21,17 @@ const app = () => {
     })
 
     class Point {
-        constructor(x, y, size = 10) {
+        constructor(x, y, size = 10, color) {
             this.x = x
             this.y = y
             this.size = size
+            this.color = color
         }
         draw() {
             ctx.save()
             ctx.translate(this.x, this.y)
             ctx.beginPath()
-            ctx.fillStyle = '#ffffff'
+            ctx.fillStyle = this.color
             ctx.arc(0, 0, this.size, 0, Math.PI * 2, true)
             ctx.fill()
             ctx.closePath()
@@ -38,26 +39,49 @@ const app = () => {
         }
     }
 
-    let size = 10
+    let size = 8
 
     const update = () => {
         requestAnimationFrame(update)
 
-        // ctx.clearRect(0, 0, cw, ch);
         ctx.save()
         ctx.translate(cw / 2, ch / 2);
-        let point = new Point(0, 0, size)
-        let point2 = new Point(0, 0, size - 10)
-        point2.fillStyle = 'black'
-        
-        size += 4
-        point.draw()
+        let pointCentral = new Point(0, 0, size, 'black')
+        pointCentral.draw()
+        ctx.restore()
+
+        ctx.save()
+        ctx.translate(0, 0);
+        let point1 = new Point(0, 0, size / 2, 'white')
+        point1.draw()
+        ctx.restore()
+
+        ctx.save()
+        ctx.translate(cw, ch);
+        let point2 = new Point(0, 0, size / 2, 'white')
         point2.draw()
         ctx.restore()
 
+        ctx.save()
+        ctx.translate(0, ch);
+        let point3 = new Point(0, 0, size / 2, 'white')
+        point3.draw()
+        ctx.restore()
+
+        ctx.save()
+        ctx.translate(cw, 0);
+        let point4 = new Point(0, 0, size / 2, 'white')
+        point4.draw()
+        ctx.restore()
+
+        // ctx.clearRect(0, 0, cw, ch);
+        
+
+        size += 4
+
         ctx.save();
         ctx.translate(cw / 2, ch / 2);
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 4; i++) {
             drawRandomCircle()
         }
         ;
