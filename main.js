@@ -1,3 +1,5 @@
+let simplex = new window.SimplexNoise()
+
 const app = () => {
 
     let canvas = document.querySelector('#myCanvas')
@@ -5,8 +7,8 @@ const app = () => {
 
     canvas.width = window.innerWidth * dpr
     canvas.height = window.innerHeight * dpr
-    canvas.style.maxWidth = window.innerWidth + "px"
-    canvas.style.maxHeight = window.innerHeight + "px"
+    canvas.style.maxWidth = window.innerWidth / 2 + "px"
+    canvas.style.maxHeight = window.innerHeight / 2 + "px"
 
     const cw = canvas.width
     const ch = canvas.height
@@ -47,11 +49,17 @@ const app = () => {
     let size = 8
     let radius = 100
     let points = []
+    let steps = 100
+    let scale = 100
+    let frequency = 0.1
 
     const update = () => {
         requestAnimationFrame(update)
         let time = Date.now() / 1000;
         ctx.clearRect(0, 0, cw, ch);
+
+        degreesTab = [-135, -90, -45, 0, 45, 90, 135, 180];
+        colorTab = ['red', 'orange', 'yellow', 'green', 'blue', 'pink', 'violet', 'black'];
 
         ctx.save()
         ctx.translate(cw2, ch2);
@@ -60,58 +68,60 @@ const app = () => {
 
         ctx.save()
         ctx.translate(0, 0);
-        let point1 = new Point(Math.cos(time) * radius * 2, 0, size, 'red')
+        let point1 = new Point(Math.cos(time) * radius * 1, 0, size, 'red')
         point1.draw()
         ctx.restore()
 
         ctx.save()
         ctx.translate(cw, 0);
-        let point4 = new Point(Math.cos(time) * radius * 2, ch, size, 'pink')
+        let point4 = new Point(Math.cos(time) * radius * 1, ch, size, 'red')
         point4.draw()
         ctx.restore()
 
         ctx.save()
         ctx.translate(0, 0);
-        let point2 = new Point(Math.cos(time) * radius * 2, ch, size, 'red')
+        let point2 = new Point(Math.cos(time) * radius * 1, ch, size, 'red')
         point2.draw()
         ctx.restore()
 
         ctx.save()
         ctx.translate(cw, 0);
-        let point5 = new Point(Math.cos(time) * radius * 2, 0, size, 'pink')
+        let point5 = new Point(Math.cos(time) * radius * 1, 0, size, 'red')
         point5.draw()
         ctx.restore()
 
         if (size < 700) {
             size += 2
         } else {
+            points = []
             size = 0
         }
 
-        // time = Date.now() / 1000;
-        // ctx.save();
-        // ctx.translate(cw / 2, ch / 2);
-        // ctx.beginPath();
-        // ctx.fillStyle = 'white';
-        // ctx.arc(Math.cos(time) * radius, Math.sin(time) * radius, 10, 0, 2 * Math.PI);
-        // ctx.fill();
-        // ctx.closePath();
-        // ctx.restore();
+        ctx.beginPath()
+        ctx.strokeStyle = 'white'
+
+        ctx.moveTo(0, simplex.noise2D(0, time) * scale)
+        for (let x = 0; x < steps; x++) {
+            ctx.lineTo((x / steps) * cw, simplex.noise2D((x * frequency), time) * scale)
+        }
+        ctx.stroke()
+        ctx.closePath()
+        ctx.restore()
 
     }
     requestAnimationFrame(update)
 
     function drawRandomCircle() {
-        ctx.clearRect(0, 0, cw, ch);
+
         let x = Math.random() * cw - cw2
         let y = Math.random() * ch - ch2
         let sizeP = Math.random() * 10
-        let tabColor = ['red', 'blue', 'green', 'yellow', 'pink', 'orange', 'purple', 'grey']
+        let tabColor = ['blue', 'green', 'yellow', 'orange', 'purple', 'grey']
 
         if (size < 500) {
             point = new Point(x, y, sizeP, 'white')
         } else {
-            point = new Point(x, y, Math.random() * 30, tabColor[Math.floor(Math.random() * tabColor.length)])
+            point = new Point(x, y, Math.random() * 40, tabColor[Math.floor(Math.random() * tabColor.length)])
         }
 
         points.push(point)
