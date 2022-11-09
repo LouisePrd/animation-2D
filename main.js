@@ -26,8 +26,10 @@ const app = () => {
             this.y = y
             this.size = size
             this.color = color
+            this.lifespan = 2
         }
         draw() {
+            this.update()
             ctx.save()
             ctx.translate(this.x, this.y)
             ctx.beginPath()
@@ -37,89 +39,89 @@ const app = () => {
             ctx.closePath()
             ctx.restore()
         }
+        update() {
+            this.lifespan -= 0.01
+        }
     }
 
     let size = 8
+    let radius = 100
+    let points = []
 
     const update = () => {
         requestAnimationFrame(update)
+        let time = Date.now() / 1000;
+        ctx.clearRect(0, 0, cw, ch);
 
         ctx.save()
-        ctx.translate(cw / 2, ch / 2);
-        let pointCentral = new Point(0, 0, size, 'black')
-        pointCentral.draw()
+        ctx.translate(cw2, ch2);
+        drawRandomCircle()
         ctx.restore()
 
         ctx.save()
         ctx.translate(0, 0);
-        let point1 = new Point(0, 0, size / 2, 'white')
+        let point1 = new Point(Math.cos(time) * radius * 2, 0, size, 'red')
         point1.draw()
         ctx.restore()
 
         ctx.save()
-        ctx.translate(cw, ch);
-        let point2 = new Point(0, 0, size / 2, 'white')
+        ctx.translate(cw, 0);
+        let point4 = new Point(Math.cos(time) * radius * 2, ch, size, 'pink')
+        point4.draw()
+        ctx.restore()
+
+        ctx.save()
+        ctx.translate(0, 0);
+        let point2 = new Point(Math.cos(time) * radius * 2, ch, size, 'red')
         point2.draw()
         ctx.restore()
 
         ctx.save()
-        ctx.translate(0, ch);
-        let point3 = new Point(0, 0, size / 2, 'white')
-        point3.draw()
-        ctx.restore()
-
-        ctx.save()
         ctx.translate(cw, 0);
-        let point4 = new Point(0, 0, size / 2, 'white')
-        point4.draw()
+        let point5 = new Point(Math.cos(time) * radius * 2, 0, size, 'pink')
+        point5.draw()
         ctx.restore()
 
-        // ctx.clearRect(0, 0, cw, ch);
-        
-
-        size += 4
-
-        ctx.save();
-        ctx.translate(cw / 2, ch / 2);
-        for (let i = 0; i < 4; i++) {
-            drawRandomCircle()
+        if (size < 700) {
+            size += 2
+        } else {
+            size = 0
         }
-        ;
-        ctx.restore();
+
+        // time = Date.now() / 1000;
+        // ctx.save();
+        // ctx.translate(cw / 2, ch / 2);
+        // ctx.beginPath();
+        // ctx.fillStyle = 'white';
+        // ctx.arc(Math.cos(time) * radius, Math.sin(time) * radius, 10, 0, 2 * Math.PI);
+        // ctx.fill();
+        // ctx.closePath();
+        // ctx.restore();
 
     }
     requestAnimationFrame(update)
 
     function drawRandomCircle() {
+        ctx.clearRect(0, 0, cw, ch);
         let x = Math.random() * cw - cw2
         let y = Math.random() * ch - ch2
-        let size = Math.random() * 10
-        ctx.save()
-        ctx.translate(x, y)
-        ctx.beginPath()
-        ctx.fillStyle = 'white'
-        ctx.arc(0, 0, size, 0, Math.PI * 2, true)
-        ctx.fill()
-        ctx.closePath()
-        ctx.restore()
+        let sizeP = Math.random() * 10
+        let tabColor = ['red', 'blue', 'green', 'yellow', 'pink', 'orange', 'purple', 'grey']
+
+        if (size < 500) {
+            point = new Point(x, y, sizeP, 'white')
+        } else {
+            point = new Point(x, y, Math.random() * 30, tabColor[Math.floor(Math.random() * tabColor.length)])
+        }
+
+        points.push(point)
+        points.forEach(point => {
+            point.draw()
+        })
+        points = points.filter(point => point.lifespan > 0)
     }
 
 }
-
-    // const update = () => {
-    //     requestAnimationFrame(update)
-    //     let time = Date.now() / 1000;
-    //     let radius = 100
-    //     ctx.clearRect(0, 0, cw, ch);
-    //     ctx.save();
-    //     ctx.translate(cw / 2, ch / 2);
-    //             let x = Math.cos(time) * radius * 2
-    //             let y = 0
-    //             let point = new Point(x, y, 100, 'white')
-    //             point.draw()
-    //     ctx.restore();
-
-    // }
 
 document.addEventListener('DOMContentLoaded', () => {
     app()
